@@ -1,4 +1,12 @@
 .main {
+	--font-family: 'Open Sans';
+	--font-size: 18px;
+	--font-color: #000000;
+	--container-width: 1394px;
 	--bg-color: #ffffff;
+
 	background-color: var(--bg-color, #ffffff);
+	font-family: var(--font-family, 'Open Sans');
+	font-size: var(--font-size, 18px);
+	color: var(--font-color, #000000);
 }

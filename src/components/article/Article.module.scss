@@ -4,7 +4,7 @@
 	justify-content: center;
 	align-items: center;
 	row-gap: 24px;
-	max-width: var(--container-width, auto);
+	max-width: var(--container-width, 1394px);
 	margin: 0 auto;
 	padding: 72px 0 144px;
 }
@@ -14,7 +14,11 @@
 }
 
 .image {
-	width: 100%;
-	height: auto;
+	width: 100vw; // Занимает всю ширину viewport для максимального использования пространства
+	max-width: var(--image-max-width, 1600px); // Максимальная ширина изображения зависит от выбранного параметра
+	height: 1000px; // Фиксированная высота для правильной работы object-fit
 	margin-top: 26px;
+	object-fit: cover;
+	object-position: center;
+	overflow: hidden;
 }

@@ -212,17 +212,14 @@
 .optionDisabled::after {
 	content: '';
 	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background: repeating-linear-gradient(
-		45deg,
-		transparent,
-		transparent 2px,
-		rgba(0, 0, 0, 0.3) 2px,
-		rgba(0, 0, 0, 0.3) 4px
-	);
+	left: 17px; // Позиционируем относительно левого края опции (padding: 15px + отступ для индикатора)
+	top: 12.5px; // Опускаем ниже для точного совпадения с цветным индикатором
+	width: 35px; // Ширина цветного индикатора
+	height: 35px; // Высота цветного индикатора
+	background-image: url('src/images/Square.png');
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
 	pointer-events: none;
 }
 
