@@ -11,18 +11,21 @@ import styles from './Select.module.scss';
 type OptionProps = {
 	option: OptionType;
 	onClick: (value: OptionType['value']) => void;
+	isDisabled?: boolean;
 };
 
 export const Option = (props: OptionProps) => {
 	const {
 		option: { value, title, optionClassName, className },
 		onClick,
+		isDisabled = false,
 	} = props;
 	const optionRef = useRef<HTMLLIElement>(null);
 
 	const handleClick =
 		(clickedValue: OptionType['value']): MouseEventHandler<HTMLLIElement> =>
 		() => {
+			if (isDisabled) return;
 			onClick(clickedValue);
 		};
 
@@ -34,11 +37,16 @@ export const Option = (props: OptionProps) => {
 
 	return (
 		<li
-			className={clsx(styles.option, styles[optionClassName || ''])}
+			className={clsx(
+				styles.option,
+				styles[optionClassName || ''],
+				{ [styles.optionDisabled]: isDisabled }
+			)}
 			value={value}
 			onClick={handleClick(value)}
-			tabIndex={0}
+			tabIndex={isDisabled ? -1 : 0}
 			data-testid={`select-option-${value}`}
+			data-disabled={isDisabled}
 			ref={optionRef}>
 			<Text family={isFontFamilyClass(className) ? className : undefined}>
 				{title}

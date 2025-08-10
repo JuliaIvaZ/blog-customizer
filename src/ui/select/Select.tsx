@@ -18,10 +18,11 @@ type SelectProps = {
 	onChange?: (selected: OptionType) => void;
 	onClose?: () => void;
 	title?: string;
+	disabledOptions?: OptionType[];
 };
 
 export const Select = (props: SelectProps) => {
-	const { options, placeholder, selected, onChange, onClose, title } = props;
+	const { options, placeholder, selected, onChange, onClose, title, disabledOptions = [] } = props;
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 	const rootRef = useRef<HTMLDivElement>(null);
 	const placeholderRef = useRef<HTMLDivElement>(null);
@@ -40,6 +41,10 @@ export const Select = (props: SelectProps) => {
 	});
 
 	const handleOptionClick = (option: OptionType) => {
+		// Проверяем, не заблокирована ли опция
+		if (disabledOptions.some(disabled => disabled.value === option.value)) {
+			return;
+		}
 		setIsOpen(false);
 		onChange?.(option);
 	};
@@ -91,6 +96,7 @@ export const Select = (props: SelectProps) => {
 									key={option.value}
 									option={option}
 									onClick={() => handleOptionClick(option)}
+									isDisabled={disabledOptions.some(disabled => disabled.value === option.value)}
 								/>
 							))}
 					</ul>

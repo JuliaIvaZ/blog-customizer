@@ -8,6 +8,15 @@
 	row-gap: 4px;
 }
 
+.title {
+	font-family: 'Open Sans';
+	font-weight: 800;
+	font-size: 12px;
+	line-height: 100%;
+	text-transform: uppercase;
+	letter-spacing: 0%;
+}
+
 .arrow {
 	position: absolute;
 	top: 50%;
@@ -78,7 +87,11 @@
 }
 
 .option:hover {
-	background: var(--grey, #c4c4c4);
+	background-color: #EEEEEE;
+}
+
+.option:active {
+	background-color: #D7D7D7;
 }
 
 @mixin option-color-before {
@@ -187,6 +200,34 @@
 .option-purple[data-selected='true']::after {
 	@include option-color-after;
 	background-color: #ffffff;
+}
+
+// Стили для заблокированных опций
+.optionDisabled {
+	cursor: not-allowed !important;
+	opacity: 0.6;
+	position: relative;
+}
+
+.optionDisabled::after {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: repeating-linear-gradient(
+		45deg,
+		transparent,
+		transparent 2px,
+		rgba(0, 0, 0, 0.3) 2px,
+		rgba(0, 0, 0, 0.3) 4px
+	);
+	pointer-events: none;
+}
+
+.optionDisabled:hover {
+	background: rgb(255 255 255 / 100%) !important;
 }
 
 @mixin option-width-before {
