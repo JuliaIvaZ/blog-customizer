@@ -8,6 +8,15 @@
 	row-gap: 4px;
 }
 
+.title {
+	font-family: 'Open Sans';
+	font-weight: 800;
+	font-size: 12px;
+	line-height: 100%;
+	text-transform: uppercase;
+	letter-spacing: 0%;
+}
+
 .arrow {
 	position: absolute;
 	top: 50%;
@@ -78,7 +87,11 @@
 }
 
 .option:hover {
-	background: var(--grey, #c4c4c4);
+	background-color: #EEEEEE;
+}
+
+.option:active {
+	background-color: #D7D7D7;
 }
 
 @mixin option-color-before {
@@ -187,6 +200,31 @@
 .option-purple[data-selected='true']::after {
 	@include option-color-after;
 	background-color: #ffffff;
+}
+
+// Стили для заблокированных опций
+.optionDisabled {
+	cursor: not-allowed !important;
+	opacity: 0.6;
+	position: relative;
+}
+
+.optionDisabled::after {
+	content: '';
+	position: absolute;
+	left: 17px; // Позиционируем относительно левого края опции (padding: 15px + отступ для индикатора)
+	top: 12.5px; // Опускаем ниже для точного совпадения с цветным индикатором
+	width: 35px; // Ширина цветного индикатора
+	height: 35px; // Высота цветного индикатора
+	background-image: url('src/images/Square.png');
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+	pointer-events: none;
+}
+
+.optionDisabled:hover {
+	background: rgb(255 255 255 / 100%) !important;
 }
 
 @mixin option-width-before {
