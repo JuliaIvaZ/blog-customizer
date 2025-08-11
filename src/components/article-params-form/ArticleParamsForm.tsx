@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { ArrowButton } from 'src/ui/arrow-button';
 import { Button } from 'src/ui/button';
 import { Select } from 'src/ui/select';
@@ -13,7 +13,9 @@ import {
 	defaultArticleState,
 	type ArticleStateType,
 } from 'src/constants/articleProps';
-import { useAppContext } from 'src/index';
+import { useAppContext } from 'src/context/AppContext';
+import { useClose } from 'src/hooks/useClose';
+import clsx from 'clsx';
 
 import styles from './ArticleParamsForm.module.scss';
 
@@ -22,22 +24,11 @@ export const ArticleParamsForm = () => {
 	const { formState, updateFormState, applyFormState, updatePageState } = useAppContext();
 	const formRef = useRef<HTMLElement>(null);
 
-	// Закрытие формы при клике вне формы
-	useEffect(() => {
-		const handleClickOutside = (event: MouseEvent) => {
-			if (formRef.current && !formRef.current.contains(event.target as Node)) {
-				setIsFormOpen(false);
-			}
-		};
-
-		if (isFormOpen) {
-			document.addEventListener('mousedown', handleClickOutside);
-		}
-
-		return () => {
-			document.removeEventListener('mousedown', handleClickOutside);
-		};
-	}, [isFormOpen]);
+	useClose({
+		isOpen: isFormOpen,
+		onClose: () => setIsFormOpen(false),
+		rootRef: formRef,
+	});
 
 	const handleToggleForm = () => {
 		setIsFormOpen(!isFormOpen);
@@ -63,26 +54,22 @@ export const ArticleParamsForm = () => {
 		updateFormState({ ...formState, contentWidth: option });
 	};
 
-	const handleApply = () => {
+	const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+		e.preventDefault();
 		applyFormState();
 		setIsFormOpen(false);
 	};
 
 	const handleReset = () => {
-		// Сбрасываем форму к начальным настройкам
 		updateFormState(defaultArticleState);
-		// Применяем начальные настройки к странице
 		updatePageState(defaultArticleState);
-		// Закрываем форму
 		setIsFormOpen(false);
 	};
 
-	// Определяем заблокированные цвета фона (цвета, совпадающие с выбранным цветом шрифта)
 	const disabledBackgroundColors = backgroundColors.filter(
 		bgColor => bgColor.value === formState.fontColor.value
 	);
 
-	// Определяем заблокированные цвета шрифта (цвета, совпадающие с выбранным цветом фона)
 	const disabledFontColors = fontColors.filter(
 		fontColor => fontColor.value === formState.backgroundColor.value
 	);
@@ -90,8 +77,8 @@ export const ArticleParamsForm = () => {
 	return (
 		<>
 			<ArrowButton isOpen={isFormOpen} onClick={handleToggleForm} />
-			<aside ref={formRef} className={`${styles.container} ${isFormOpen ? styles.container_open : ''}`}>
-				<form className={styles.form} onSubmit={(e) => e.preventDefault()}>
+			<aside ref={formRef} className={clsx(styles.container, { [styles.container_open]: isFormOpen })}>
+				<form className={styles.form} onSubmit={handleSubmit}>
 					<div className={styles.header}>
 						<Text
 							family="open-sans"
@@ -152,7 +139,7 @@ export const ArticleParamsForm = () => {
 
 					<div className={styles.bottomContainer}>
 						<Button title='Сбросить' htmlType='button' type='clear' onClick={handleReset} />
-						<Button title='Применить' htmlType='button' type='apply' onClick={handleApply} />
+						<Button title='Применить' htmlType='submit' type='apply' />
 					</div>
 				</form>
 			</aside>
